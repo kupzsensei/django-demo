@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sample api fetch</title>
+</head>
+<body style="background-color: black; color: green;">
+    <div id="root"></div>
+</body>
+<script>
+    const container = document.getElementById("root")
+    
+    const getStudents = async () => {
+        const response = await fetch("http://127.0.0.1:8000/api/students/" , {
+      
+        })
+        const res = await response.json()
+        return res
+    }
+    
+    
+    getStudents().then(res => {
+        res.map(student => {
+            container.innerHTML += `<h1>${student.first_name} - ${student.last_name}</h1>`
+        })
+    })
+</script>
+</html>
