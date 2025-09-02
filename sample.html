@@ -6,24 +6,80 @@
     <title>sample api fetch</title>
 </head>
 <body style="background-color: black; color: green;">
+
+    <!-- Input Fields Container -->
+     <div id="postForm" style="display: flex; flex-direction: column; justify-self: center; width: 40vw; gap: .5rem; border: dashed cyan 1px; padding: 1rem;">
+        <input type="text" id="first_name" placeholder="first_name">
+        <input type="text" id="last_name" placeholder="last_name">
+        <input type="text" id="middle_name" placeholder="middle_name">
+        <button id="pasa" onclick=(postStudent()) style="cursor: pointer;">IIBIGAY MO NAAA</button>
+     </div>
+
+    <!-- Students List Container -->
     <div id="root"></div>
 </body>
 <script>
     const container = document.getElementById("root")
     
-    const getStudents = async () => {
-        const response = await fetch("http://127.0.0.1:8000/api/students/" , {
-      
+    function getStudents() {
+        const getStudentsAPI = async () => {
+                const response = await fetch("http://127.0.0.1:8000/api/students/")
+                const res = await response.json()
+                console.log("res:", res)
+                return res
+            }
+        
+        getStudentsAPI().then(res => {
+            res.map(student => {
+                container.innerHTML += `<div style="display: flex; justify-content: space-between">
+
+                <h1>${student.last_name}, ${student.first_name} ${student.middle_name ? student.middle_name[0].toUpperCase() + "." : ""}</h1>
+
+                <div>
+                    <button onClick(${deleteStudent(student)}) style="cursor: pointer; width: fit-content; height: fit-content">Delete</button>
+                    <button onClick(${deleteStudent(student)}) style="cursor: pointer; width: fit-content; height: fit-content">Edit</button>
+                </div>
+    </div>`
+
+                // Ternary Condition
+                // student.middle_name ? student.middle_name[0].toUpperCase() : ""
+            })
         })
-        const res = await response.json()
-        return res
+    }
+
+    // <div style="display: flex; justify-content: space-between">
+    //     <h1>${student.last_name}, ${student.first_name} ${student.middle_name ? student.middle_name[0].toUpperCase() + "." : ""}</h1>
+    //     <button style="cursor: pointer;">Delete</button>
+    // </div>
+
+    deleteStudent = (name) => {
+        console.log(name.first_name)
+    }
+
+    // Post onClick function
+    async function postStudent() {
+        const first_name = document.getElementById("first_name").value
+        const last_name = document.getElementById("last_name").value
+        const middle_name = document.getElementById("middle_name").value
+
+        const data = {
+            "first_name": first_name,
+            "last_name": last_name,
+            "middle_name": middle_name 
+        }
+
+        // Post Function (API)
+        console.log("Form Data; ", data)
+        const res = fetch("http://127.0.0.1:8000/api/students/", {
+                    method: "POST",
+                    headers: {
+                        accept: "application/json",
+                        "content-type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                    }).then(res => console.log(res))
     }
     
-    
-    getStudents().then(res => {
-        res.map(student => {
-            container.innerHTML += `<h1>${student.first_name} - ${student.last_name}</h1>`
-        })
-    })
+    getStudents()
 </script>
 </html>

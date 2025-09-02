@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from student.views import StudentView, StudentRetrieveUpdateDelete
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/students/', StudentView.as_view() ),
